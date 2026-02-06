@@ -341,7 +341,7 @@ document.getElementById('telegram').addEventListener('input', function(e) {
 // Базовый адрес backend-сервера (Flask, server.py)
 // ЛОКАЛЬНО: оставьте 'http://127.0.0.1:8000'
 // НА ДОМЕНЕ: замените на 'https://ВАШ_ДОМЕН' (например: 'https://apply.taler.ru')
-const API_BASE_URL = 'http://127.0.0.1:8000';
+const API_BASE_URL = 'https://taler-work.onrender.com';
 
 // Валидация формы
 document.getElementById('applicationForm').addEventListener('submit', async function(e) {
@@ -528,4 +528,5 @@ function showSuccessModal(nickname, telegram, applicationId) {
 
   <script src="script.js"></script>
 </body>
+
 </html>
