@@ -23,12 +23,6 @@ ROLE_MAP = {
 
 ALL_ROLE_KEYS = ["media", "developer", "support", "tester", "builder", "moderator"]
 
-app = Flask(__name__)
-
-# ВАЖНО: Разрешить запросы с любого домена (для GitHub Pages)
-CORS(app, origins=["*"])  # <--- ДОБАВЬТЕ ЭТО
-# Или лучше так (если знаете точный домен):
-# CORS(app, origins=["https://lerwix.github.io"])
 
 
 def load_roles():
@@ -119,4 +113,5 @@ def submit_application():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
     app.run(host="0.0.0.0", port=port, debug=False)  # debug=False для продакшена
+
 
