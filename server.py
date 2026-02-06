@@ -4,7 +4,9 @@ import uuid
 from datetime import datetime
 
 from flask import Flask, request, jsonify
-from flask_cors import CORS  # <--- ДОБАВЬТЕ ЭТО
+from flask_cors import CORS  
+app = Flask(__name__)
+CORS(app)# <--- ДОБАВЬТЕ ЭТО
 
 # Для хранения в Render лучше использовать переменные окружения
 # Или подключить внешнее хранилище
@@ -117,3 +119,4 @@ def submit_application():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
     app.run(host="0.0.0.0", port=port, debug=False)  # debug=False для продакшена
+
