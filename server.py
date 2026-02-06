@@ -4,6 +4,12 @@ import uuid
 from datetime import datetime
 
 from flask import Flask, request, jsonify
+from flask_cors import CORS  
+app = Flask(__name__)
+CORS(app)# <--- ДОБАВЬТЕ ЭТО
+
+# Для хранения в Render лучше использовать переменные окружения
+# Или подключить внешнее хранилище
 
 JSON_FILE = "roles.json"
 
@@ -17,11 +23,11 @@ ROLE_MAP = {
 
 ALL_ROLE_KEYS = ["media", "developer", "support", "tester", "builder", "moderator"]
 
-app = Flask(__name__)
 
 
 def load_roles():
     """Загрузить текущие заявки из JSON в ожидаемой ботом структуре."""
+    # В Render файлы временные, лучше использовать другой способ хранения
     if not os.path.exists(JSON_FILE):
         return {key: [] for key in ALL_ROLE_KEYS}
 
@@ -45,9 +51,23 @@ def save_roles(data: dict):
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 
+@app.route("/")
+def index():
+    """Корневой маршрут для проверки работы сервера."""
+    return jsonify({
+        "status": "online",
+        "service": "Flask Application Form API",
+        "endpoint": "/submit-application"
+    })
+
+
 @app.post("/submit-application")
 def submit_application():
     """Приём заявки с формы и сохранение в roles.json."""
+    # Обработка CORS preflight запроса
+    if request.method == "OPTIONS":
+        return '', 200
+        
     payload = request.get_json(silent=True) or {}
 
     # Значение роли, которое приходит из формы
@@ -89,9 +109,8 @@ def submit_application():
     return jsonify({"success": True, "id": application_id})
 
 
+# ВАЖНО: Добавьте эту секцию для Render
 if __name__ == "__main__":
-    # Запуск dev-сервера Flask
-    # index.html и статику можно отдавать любым веб-сервером;
-    # главное — чтобы форма отправляла запрос на этот backend.
-    app.run(host="0.0.0.0", port=8000, debug=True)
+    port = int(os.environ.get("PORT", 8000))
+    app.run(host="0.0.0.0", port=port, debug=False)  # debug=False для продакшена
 
